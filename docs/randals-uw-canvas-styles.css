@@ -1,0 +1,137 @@
+/* ===============================
+   UW Color Palette + Layout
+   =============================== */
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #F8F8F8;
+  color: #000;
+  line-height: 1.55;
+}
+
+/* ===============================
+   Header
+   =============================== */
+
+header {
+  background-color: #4B2E83;
+  /* UW Purple */
+  color: #FFFFFF;
+  padding: 30px 20px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+header p {
+  margin: 8px 0 0 0;
+  font-size: 16px;
+}
+
+/* ===============================
+   Content Container
+   =============================== */
+
+.container {
+  max-width: 950px;
+  margin: auto;
+  padding: 20px 30px;
+  background: #FFFFFF;
+  border-left: 10px solid #B7A57A;
+  /* UW Gold */
+  border-right: 10px solid #B7A57A;
+}
+
+/* ===============================
+   Headings
+   =============================== */
+
+h2 {
+  color: #4B2E83;
+  border-left: 10px solid #85754D;
+  /* Secondary Gold */
+  padding-left: 10px;
+  margin-top: 40px;
+  margin-bottom: 10px;
+}
+
+h3 {
+  color: #4B2E83;
+  margin-top: 25px;
+  margin-bottom: 8px;
+}
+
+/* ===============================
+   Code + Preformatted Blocks
+   =============================== */
+
+code {
+  background: #EEEEEE;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: Consolas, "Courier New", monospace;
+}
+
+pre {
+  background: #EEEEEE;
+  border-left: 6px solid #85754D;
+  padding: 12px;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 14px;
+}
+
+/* ===============================
+   Footer
+   =============================== */
+
+footer {
+  text-align: center;
+  padding: 20px;
+  color: #4B2E83;
+  font-size: 14px;
+  margin-top: 40px;
+}
+
+.ai-footnote {
+  margin-top: 40px;
+  color: #555;
+  text-align: center;
+}
+
+
+/* ===============================
+   Accessibility – Skip Link
+   =============================== */
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.skip-link:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 8px 12px;
+  background: #4B2E83;
+  color: #FFFFFF;
+  z-index: 1000;
+  display: inline-block;
+  margin: 10px;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+/* ===============================
+   Responsive Design
+   =============================== */
