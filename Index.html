@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course Resources | Root Source Consulting</title>
+  <style>
+    :root {
+      --uw-purple: #4b2e83;
+      --uw-gold: #b7a57a;
+      --text-dark: #222222;
+      --text-light: #ffffff;
+      --bg-light: #f8f8f8;
+      --border-light: #d9d9d9;
+      --link-blue: #005a9c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+      color: var(--text-dark);
+      background-color: var(--bg-light);
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .skip-link:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      padding: 0.75rem 1rem;
+      background-color: #ffffcc;
+      color: #000000;
+      display: inline-block;
+      z-index: 1000;
+    }
+
+    header {
+      background-color: var(--uw-purple);
+      color: var(--text-light);
+      padding: 2rem 1rem;
+      border-bottom: 6px solid var(--uw-gold);
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    h1, h2 {
+      margin-top: 0;
+    }
+
+    .intro {
+      background-color: #ffffff;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .resource-list {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .resource-card {
+      background-color: #ffffff;
+      border: 1px solid var(--border-light);
+      border-left: 6px solid var(--uw-purple);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+    }
+
+    .resource-card h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+
+    a {
+      color: var(--link-blue);
+    }
+
+    a:hover,
+    a:focus {
+      text-decoration: none;
+    }
+
+    footer {
+      margin-top: 2rem;
+      padding: 1.5rem 1rem;
+      background-color: #eeeeee;
+      border-top: 1px solid var(--border-light);
+      font-size: 0.95rem;
+    }
+
+    ul {
+      padding-left: 1.25rem;
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <header>
+    <div class="container">
+      <h1>Course Resources</h1>
+      <p>Teaching materials, reference guides, and downloadable resources for database and data-focused courses.</p>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <div class="container">
+      <section class="intro" aria-labelledby="about-this-site">
+        <h2 id="about-this-site">About This Site</h2>
+        <p>
+          This page provides access to course resources published in this GitHub repository.
+          These materials are intended to support students in courses related to databases,
+          SQL, programming, and data systems.
+        </p>
+        <p>
+          Additional resources will be added over time. Please check back for updates.
+        </p>
+      </section>
+
+      <section aria-labelledby="available-resources">
+        <h2 id="available-resources">Available Resources</h2>
+
+        <div class="resource-list">
+          <article class="resource-card">
+            <h3>Randal's SQL Style Guide</h3>
+            <p>
+              A reference guide for formatting SQL code in this course, including keyword capitalization,
+              indentation, naming conventions, and script organization standards.
+            </p>
+            <p>
+              <a href="RandalsSQLStyleGuide.html">Open the SQL Style Guide</a>
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="intro" aria-labelledby="future-resources">
+        <h2 id="future-resources">Planned Resources</h2>
+        <ul>
+          <li>SQL assignment starter files</li>
+          <li>Database design reference sheets</li>
+          <li>Python and ETL support materials</li>
+          <li>Course-specific lab resources</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p><strong>Root Source Consulting</strong></p>
+      <p>Course resources maintained by Randal Root.</p>
+    </div>
+  </footer>
+</body>
+</html>
