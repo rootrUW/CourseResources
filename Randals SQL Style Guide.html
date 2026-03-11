@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Randal's Preferred SQL Style Guide</title>
+
+  <link rel="stylesheet" href="randals-uw-canvas-styles.css" />
+</head>
+
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <header>
+    <h1>SQL Style Guide</h1>
+    <p>Randal's Preferred SQL Formatting Guidelines</p>
+  </header>
+
+  <main id="main-content" class="container" role="main">
+
+    <p>These formatting guidelines represent the conventions that have consistently proven the most efficient
+      and maintainable throughout my work with multiple organizations over several decades.
+      While SQL style standards can vary from one company to another, using a unified style in this course
+      will help ensure clarity and consistency across all student work.</p>
+
+    <!-- Section 0: Goals -->
+    <h2>Goals of this Style Guide</h2>
+
+    <p>Using this style guide provides the following benefits:</p>
+
+    <ul>
+      <li>Ensures a consistent SQL style across all assignments</li>
+      <li>Reduces mistakes caused by inconsistent formatting</li>
+      <li>Makes your SQL easier for others to read and understand</li>
+      <li>Reduces debugging time caused by formatting issues</li>
+      <li>Helps AI tools produce better results by giving clear formatting expectations</li>
+    </ul>
+
+    <p><strong>Note:</strong> Please use this style guide for all SQL you write in this course.</p>
+
+    <!-- Section 1 -->
+    <h2>1. Casing and Formatting Basics</h2>
+
+    <h3>1.1 Indentation</h3>
+    <ul>
+      <li>Use <strong>2 spaces</strong> per indentation level.</li>
+      <li>Do <strong>not</strong> use tabs. (These can appear differently on other computers,
+        making the format hard to read.)</li>
+    </ul>
+
+    <p><strong>Example: Basic SELECT with indentation</strong></p>
+    <pre>Select
+  c.CustomerId,
+  c.CustomerFirstName,
+  c.CustomerLastName
+From dbo.Customers As c
+Where c.IsActive = 1;
+  </pre>
+
+    <h3>1.2 Keyword Casing</h3>
+    <p>Use <strong>Title Case</strong> for SQL keywords:</p>
+
+    <p>
+      <code>Select</code>, <code>From</code>, <code>Where</code>,
+      <code>Group By</code>, <code>Order By</code>,
+      <code>Inner Join</code>, <code>Left Join</code>,
+      <code>Case</code>, <code>End</code>, <code>Begin</code>,
+      <code>Go</code>
+    </p>
+
+    <h3>1.3 Identifier Casing</h3>
+    <ul>
+      <li>Use <strong>PascalCase</strong> (also known as TitleCasing) for all <strong>tables and columns</strong>.</li>
+      <li>Avoid abbreviations unless universally understood.</li>
+      <li><strong>Good:</strong> Customers, CustomerOrders, CustomerFirstName, EnrollmentStatus</li>
+      <li><strong>Avoid:</strong> CustTbl, EnrStat</li>
+    </ul>
+    <ul>
+      <li>Use <strong>camelCase</strong> (first word lower-case, following words capitalized)
+        for <strong>indexes, constraints, views, functions, and procedures</strong>.</li>
+      <li><strong>Good:</strong> ciCustomers, nciCustomersLastName, pkCustomers, uqCustomerEmailAddress,
+        vCustomers, fCustomersByLastName(), pInsCustomer, pUpdCustomer, pDelCustomer</li>
+      <li><strong>Avoid:</strong> names_with_underscores, RandomALLCAPSNames</li>
+    </ul>
+    <p><strong>Note:</strong> Avoid underscores in names since they can look like spaces in some UIs.</p>
+
+    <!-- Section 2 -->
+    <h2>2. Naming Conventions</h2>
+
+    <h3>2.1 Tables</h3>
+    <ul>
+      <li>Use <strong>plural nouns</strong> for table names: <code>dbo.Customers</code>, <code>dbo.Orders</code>.</li>
+      <li>Always specify the schema (namespace).</li>
+    </ul>
+
+    <p><strong>Example: Table definition</strong></p>
+    <pre>Create Table dbo.Customers (
+  CustomerId int Not Null,
+  CustomerFirstName varchar(50) Not Null,
+  CustomerLastName varchar(50) Not Null,
+  CreatedDate datetime Not Null,
+  IsActive bit Not Null,
+  Constraint pkCustomers Primary Key (CustomerId)
+);
+  </pre>
+
+    <h3>2.2 Column Names</h3>
+    <ul>
+      <li>Use singular nouns for column names: <code>CustomerId</code>, <code>OrderId</code>.</li>
+      <li>Use descriptive names that describe the stored data.</li>
+      <ul>
+        <li><code>CustomerFirstName</code> (instead of just FirstName)</li>
+        <li><code>CreatedDate</code> (instead of just Date)</li>
+      </ul>
+      <li>Use standard suffixes:
+        <ul>
+          <li><code>Id</code> for identifiers (CustomerId, OrderId)</li>
+          <li><code>Date</code> for dates (OrderDate, CreatedDate)</li>
+        </ul>
+      </li>
+      <li>Metadata column names do not need to begin with the table name (<code>CreatedDate</code> instead of
+        <code>CustomerCreatedDate</code>).</li>
+      <li>Booleans begin with <code>Is</code> (IsActive, IsDeleted).</li>
+    </ul>
+
+    <h3>2.3 Data Types</h3>
+    <p>Use lower-case to reduce visual noise and keep the focus on structure and readability.</p>
+    <ul>
+      <li>Use the built-in SQL Server data types appropriately:
+        <code>int</code> for integers,
+        <code>varchar(number)</code> or
+        <code>nvarchar(number)</code> for variable-length strings,
+        <code>datetime</code> for dates and times,
+        <code>bit</code> for boolean values,
+        <code>decimal(precision,scale)</code> for precise decimal numbers, etc.
+      </li>
+    </ul>
+    <p><strong>Note:</strong> Use <code>nvarchar</code> when Unicode support is required; otherwise,
+      <code>varchar</code> is acceptable.</p>
+
+    <h3>2.4 Keys and Constraints</h3>
+    <ul>
+      <li>Primary key: <code>pkTableName</code> (for example, <code>pkCustomers</code>).</li>
+      <li>Foreign key: <code>fkSingleParentPluralChildren</code> (for example, <code>fkCustomerOrders</code> for Orders
+        referencing Customers).</li>
+    </ul>
+
+    <h3>2.5 Indexes</h3>
+    <ul>
+      <li>Use <code>ciTable</code> for clustered indexes (example: <code>ciOrders</code>).</li>
+      <li>Use <code>nciTableColumn</code> for non-clustered indexes (example: <code>nciOrdersOrderDate</code>).</li>
+    </ul>
+
+    <h3>2.6 Views</h3>
+    <ul>
+      <li>Base view (closest abstraction of a table): <code>vCustomers</code></li>
+      <li>Reporting view: <code>vSalesSummary</code></li>
+    </ul>
+
+    <p><strong>Example: Base view</strong></p>
+    <pre>Create or Alter View dbo.vCustomers
+As
+Select
+  c.CustomerId,
+  c.CustomerFirstName,
+  c.CustomerLastName,
+  c.CreatedDate,
+  c.IsActive
+From dbo.Customers As c;
+  </pre>
+
+    <!-- Section 3 -->
+    <h2>3. Query Formatting</h2>
+
+    <h3>3.1 Layout</h3>
+    <ul>
+      <li>One clause per line.</li>
+      <li>One column per line in non-trivial queries.</li>
+      <li>Multiple columns per line in trivial queries are OK.</li>
+      <li>Align <code>Join</code> and <code>On</code> blocks.</li>
+    </ul>
+
+    <p><strong>Example: Multi-table query</strong></p>
+    <pre>Select
+  o.OrderId,
+  o.OrderDate,
+  c.CustomerId,
+  c.CustomerFirstName,
+  c.CustomerLastName
+From dbo.Orders As o
+Inner Join dbo.Customers As c
+  On c.CustomerId = o.CustomerId
+Where o.OrderDate >= '2025-01-01'
+Order By
+  o.OrderDate Desc;
+  </pre>
+
+    <h3>3.2 Avoid Select *</h3>
+    <p><strong>Always list columns explicitly for non-trivial queries.</strong></p>
+    <p><strong>Tip:</strong> Using <code>Select *</code> is OK for quick testing and trivial queries.</p>
+
+    <p><strong>Example: Use seldom</strong></p>
+    <pre>Select * From dbo.Customers;
+  </pre>
+
+    <p><strong>Example: Use often</strong></p>
+    <pre>Select
+  CustomerId,
+  CustomerFirstName,
+  CustomerLastName,
+  CreatedDate
+From dbo.Customers;
+  </pre>
+
+    <!-- Section 4 -->
+    <h2>4. Batches, Semicolons, and Go</h2>
+
+    <ul>
+      <li>Terminate every SQL statement with <code>;</code>.</li>
+      <li>Use <code>Go</code> to separate batches in scripts.</li>
+    </ul>
+
+    <p><strong>Example: Batches</strong></p>
+    <pre>Create Table dbo.Temp (
+  Id int Not Null
+);
+Go
+
+Insert Into dbo.Temp (Id)
+Values (1);
+Go
+  </pre>
+
+    <p><strong>Remember:</strong> The purpose of the <code>Go</code> keyword is to inform SQL Server
+      which statements should be run as a single "batch" of code by both grouping and separating sets
+      of one or more statements.</p>
+
+    <!-- Section 5 -->
+    <h2>5. Comments and Script Headers</h2>
+
+    <h3>5.1 Script Header</h3>
+
+    <p><strong>Example: Standard script header</strong></p>
+    <pre>--*************************************************************************--
+-- Title: ScriptName
+-- Author: YourName
+-- Desc: Description of script purpose
+-- Change Log: When,Who,What
+--   2030-01-01,RRoot,Created Script
+--*************************************************************************--
+  </pre>
+
+    <h3>5.2 Commenting</h3>
+    <p>Use comments to explain <strong>why</strong> something is written the way it is, not just <strong>what</strong>
+      it does.</p>
+
+    <p><strong>Example: Why comments</strong></p>
+    <pre>-- Only include active customers in the report.
+Where c.IsActive = 1;
+  </pre>
+
+    <!-- Section 6 -->
+    <h2>6. DDL Standards (Create/Alter Table)</h2>
+
+    <p>Use one column definition per line and group constraints at the end. Keep the syntax "tight" instead of trying to
+      align types and nullability.</p>
+
+    <p><strong>Example: DDL style</strong></p>
+    <pre>Create Table dbo.Customers (
+  CustomerId int Not Null,
+  CustomerFirstName varchar(50) Not Null,
+  CustomerLastName varchar(50) Not Null,
+  CustomerEmailAddress varchar(255) Null,
+  CreatedDate datetime Not Null Default (GetDate()),
+  IsActive bit Not Null Default (1),
+  Constraint pkCustomers Primary Key (CustomerId),
+  Constraint uqCustomerEmailAddress Unique (CustomerEmailAddress)
+);
+  </pre>
+
+    <!-- Section 7 -->
+    <h2>7. Transactions and Error Handling</h2>
+
+    <p><strong>Example: Transaction with TRY/CATCH</strong></p>
+    <pre>Begin Try
+  Begin Tran;
+    Update dbo.Customers
+    Set IsActive = 0
+    Where CustomerId = 5;
+  Commit Tran;
+End Try
+Begin Catch
+  If (@@TranCount > 0) Rollback Tran;
+
+  Declare @ErrorMessage varchar(4000) = Error_Message();
+  Raiserror(@ErrorMessage, 16, 1);
+End Catch;
+  </pre>
+
+    <!-- Section 8 -->
+    <h2>Using AI Tools with This Style Guide</h2>
+
+    <p><strong>Students:</strong> You are encouraged to use AI tools to help with formatting and improving the
+      readability of your SQL code.
+      However, you are still responsible for understanding the code you submit and verifying that the logic is correct.
+    </p>
+
+    <p><strong>Tip:</strong> You can paste this style guide into any AI tool and ask it to format your SQL according to
+      these standards.
+      A recommended workflow is:</p>
+
+    <ol>
+      <li>
+        <strong>Tell the AI your intent.</strong>
+        <p>For example:</p>
+        <pre>"Please reformat my SQL code using the SQL Style Guide provided below. Do not change my logic. I will paste the code when you are ready."</pre>
+      </li>
+
+      <li><strong>Paste this paragraph of the style guide</strong> into the AI's input so it knows the rules to follow.</li>
+
+      <code>Please reformat my SQL code using the following style rules: use Title Case for SQL keywords; 
+        use PascalCase for table and column names; use camelCase for indexes, constraints, views, functions, 
+        and stored procedures; use lowercase for all data types; indent with 2 spaces (no tabs); place one 
+        clause per line and one column per line in non-trivial queries; avoid Select * except for quick testing; 
+        align Join and On blocks; keep DDL syntax tight with one column per line and constraints grouped at the end; 
+        end all statements with semicolons; use Go to separate batches. Do not change my query logic—only formatting 
+        and readability.</code>
+
+      <li><strong>Paste your SQL code</strong> when the AI is ready.</li>
+
+      <li><strong>Review and edit the AI's output</strong> as needed to ensure accuracy and correctness.</li>
+    </ol>
+
+  </main>
+
+  <footer>
+    Randal's Preferred SQL Style Guide
+    <p class="ai-footnote">
+      <small>Note: This page was developed with the assistance of an AI tool and reviewed for accuracy and clarity by
+        the author.</small>
+    </p>
+
+  </footer>
+
+</body>
+
+</html>
