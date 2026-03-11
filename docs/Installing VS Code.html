@@ -1,0 +1,297 @@
+<main id="main-content">
+  <div class="container">
+
+    <!-- ========================= -->
+    <!--  VS CODE INSTALLATION PAGE -->
+    <!-- ========================= -->
+
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+      <meta charset="UTF-8">
+      <title>Module 01: VS Code Installation Guide</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <!-- Course Styles -->
+      <link rel="stylesheet" href="randals-uw-canvas-styles.css" />
+    </head>
+
+    <body>
+
+      <header>
+        <h1>Module 01: Visual Studio Code (VS Code) Installation Guide</h1>
+        <p>
+          This page provides step-by-step instructions for installing Visual Studio Code (VS Code) on Windows and macOS,
+          plus troubleshooting tips and quick micro-labs to verify that everything works.
+        </p>
+      </header>
+
+      <!-- -------------------------------- -->
+      <!--  INSTALLATION OVERVIEW SECTION   -->
+      <!-- -------------------------------- -->
+      <section id="install-overview">
+        <h2>11.0 Installing Visual Studio Code (VS Code)</h2>
+        <p>
+          VS Code is the editor used in this course for writing SQL, Python, and documentation.
+          It runs on Windows and macOS and is free to install.
+        </p>
+        <p>
+          Use the sections below that match your operating system. At the end, review the troubleshooting section
+          if you run into any issues.
+        </p>
+      </section>
+
+      <!-- -------------------------------- -->
+      <!--  WINDOWS INSTALLATION SECTION    -->
+      <!-- -------------------------------- -->
+      <section id="install-windows">
+        <h2>11.1 Install VS Code on Windows</h2>
+
+        <article aria-labelledby="win-step1">
+          <h3 id="win-step1">Step 1: Download VS Code</h3>
+          <figure>
+            <img src="images/vscode-download-windows.png"
+              alt="The VS Code homepage showing the large blue Download for Windows button used to begin installation.">
+            <figcaption>VS Code homepage with the Download for Windows button.</figcaption>
+          </figure>
+          <ol>
+            <li>Open your browser and go to <a href="https://code.visualstudio.com/" target="_blank"
+                rel="noopener">https://code.visualstudio.com/</a>.</li>
+            <li>Select <strong>Download for Windows</strong>.</li>
+          </ol>
+        </article>
+
+        <article aria-labelledby="win-step2">
+          <h3 id="win-step2">Step 2: Run the Installer</h3>
+          <figure>
+            <img src="images/vscode-setup-windows-license.png"
+              alt="The VS Code Setup Wizard on Windows displaying the license agreement and navigation buttons for installation.">
+            <figcaption>VS Code Setup Wizard (license agreement screen).</figcaption>
+          </figure>
+          <ol>
+            <li>Locate the downloaded file, usually named <code>VSCodeUserSetup-x64.exe</code>.</li>
+            <li>Double-select the installer.</li>
+            <li>If prompted by Windows, select <strong>Yes</strong>.</li>
+            <li>Accept the agreement and select <strong>Next</strong>.</li>
+          </ol>
+        </article>
+
+        <article aria-labelledby="win-step3">
+          <h3 id="win-step3">Step 3: Choose Installation Options</h3>
+          <figure>
+            <img src="images/vscode-setup-windows-additional-tasks.png"
+              alt="The Select Additional Tasks screen in the VS Code installer with checkboxes for Add to PATH and file type associations.">
+            <figcaption>Selecting additional tasks such as Add to PATH.</figcaption>
+          </figure>
+          <ol>
+            <li>Keep the default installation location.</li>
+            <li>Select the following checkboxes:
+              <ul>
+                <li><strong>Add to PATH</strong></li>
+                <li><strong>Register Code as an editor for supported file types</strong></li>
+              </ul>
+            </li>
+            <li>Select <strong>Next</strong>, then <strong>Install</strong>.</li>
+          </ol>
+        </article>
+
+        <article aria-labelledby="win-step4">
+          <h3 id="win-step4">Step 4: Launch VS Code</h3>
+          <figure>
+            <img src="images/vscode-first-launch-windows.png"
+              alt="The VS Code main window after first launch, showing the Welcome page and sidebar icons.">
+            <figcaption>VS Code after first launch.</figcaption>
+          </figure>
+          <ol>
+            <li>Select <strong>Finish</strong> to launch VS Code.</li>
+            <li>You should see the Welcome screen.</li>
+          </ol>
+        </article>
+
+        <article aria-labelledby="win-step5">
+          <h3 id="win-step5">Step 5: Install Required Extensions</h3>
+          <figure>
+            <img src="images/vscode-extensions-mssql-windows.png"
+              alt="The VS Code Extensions panel open with the Microsoft SQL Server extension highlighted for installation.">
+            <figcaption>Installing the SQL Server extension.</figcaption>
+          </figure>
+          <ol>
+            <li>Select the <strong>Extensions</strong> icon.</li>
+            <li>Search for <code>ms-sql</code> and install the SQL Server extension.</li>
+            <li>(Optional) Install the Python extension.</li>
+          </ol>
+        </article>
+
+        <article aria-labelledby="win-microlab">
+          <h3 id="win-microlab">Micro-Lab 11.1 (3 minutes): Verify Windows Installation</h3>
+          <ol>
+            <li>Select <strong>Terminal &gt; New Terminal</strong>.</li>
+            <li>Type:
+              <pre><code>code --version</code></pre>
+            </li>
+            <li>If version info appears, VS Code is installed correctly.</li>
+          </ol>
+        </article>
+      </section>
+
+      <!-- -------------------------------- -->
+      <!--        macOS INSTALLATION        -->
+      <!-- -------------------------------- -->
+      <section id="install-macos">
+        <h2>11.2 Install VS Code on macOS</h2>
+
+        <article aria-labelledby="mac-step1">
+          <h3 id="mac-step1">Step 1: Download VS Code</h3>
+          <figure>
+            <img src="images/vscode-download-macos.png"
+              alt="The VS Code homepage showing the Download for macOS button.">
+            <figcaption>VS Code homepage (macOS download).</figcaption>
+          </figure>
+          <ol>
+            <li>Go to <a href="https://code.visualstudio.com/">https://code.visualstudio.com/</a>.</li>
+            <li>Select <strong>Download for macOS</strong>.</li>
+          </ol>
+        </article>
+
+        <article aria-labelledby="mac-step2">
+          <h3 id="mac-step2">Step 2: Move VS Code to Applications</h3>
+          <figure>
+            <img src="images/vscode-macos-drag-to-applications.png"
+              alt="A macOS Finder window showing Visual Studio Code.app being dragged into the Applications folder.">
+            <figcaption>Dragging VS Code into Applications.</figcaption>
+          </figure>
+          <ol>
+            <li>Open the downloaded ZIP file.</li>
+            <li>Drag <code>Visual Studio Code.app</code> into your <strong>Applications</strong> folder.</li>
+          </ol>
+        </article>
+
+        <article aria-labelledby="mac-step3">
+          <h3 id="mac-step3">Step 3: Open VS Code</h3>
+          <figure>
+            <img src="images/vscode-first-launch-macos.png"
+              alt="The first launch of VS Code on macOS showing the Welcome screen.">
+            <figcaption>VS Code Welcome screen on macOS.</figcaption>
+          </figure>
+          <ol>
+            <li>Open <strong>Launchpad</strong> or the <strong>Applications</strong> folder.</li>
+            <li>Select <strong>Visual Studio Code</strong>.</li>
+            <li>If macOS shows a security warning, select <strong>Open</strong>.</li>
+          </ol>
+        </article>
+
+        <article aria-labelledby="mac-step4">
+          <h3 id="mac-step4">Step 4: Install Required Extensions</h3>
+          <figure>
+            <img src="images/vscode-extensions-mssql-macos.png"
+              alt="The VS Code Extensions panel on macOS with the SQL Server extension selected for installation.">
+            <figcaption>Installing the SQL Server extension.</figcaption>
+          </figure>
+          <ol>
+            <li>Select the <strong>Extensions</strong> icon.</li>
+            <li>Search for <strong>SQL Server (mssql)</strong>.</li>
+            <li>Install the extension.</li>
+          </ol>
+        </article>
+
+        <article aria-labelledby="mac-step5">
+          <h3 id="mac-step5">Step 5 (Optional): Add VS Code to Terminal PATH</h3>
+          <figure>
+            <img src="images/vscode-macos-install-code-command.png"
+              alt="The VS Code Command Palette showing the Shell Command: Install 'code' command in PATH option.">
+            <figcaption>Adding the code command to PATH.</figcaption>
+          </figure>
+          <ol>
+            <li>Select <strong>View &gt; Command Palette</strong>.</li>
+            <li>Type <code>Shell Command: Install 'code' command in PATH</code>.</li>
+            <li>Select it.</li>
+            <li>Restart Terminal.</li>
+          </ol>
+        </article>
+
+        <article aria-labelledby="mac-microlab">
+          <h3 id="mac-microlab">Micro-Lab 11.2 (3 minutes): Verify macOS Installation</h3>
+          <ol>
+            <li>Open Terminal.</li>
+            <li>Type:
+              <pre><code>code --version</code></pre>
+            </li>
+            <li>If version info appears, installation is complete.</li>
+          </ol>
+        </article>
+      </section>
+
+      <!-- -------------------------------- -->
+      <!--       GENERAL VS CODE TIPS       -->
+      <!-- -------------------------------- -->
+      <section id="vscode-tips">
+        <h2>11.3 Tips for Using VS Code in This Course</h2>
+
+        <figure>
+          <img src="images/vscode-interface-overview.png"
+            alt="The VS Code interface showing the Explorer panel, open editor window, and terminal.">
+          <figcaption>VS Code interface areas used in this course.</figcaption>
+        </figure>
+
+        <ul>
+          <li>Use <strong>File &gt; Open Folder</strong> to open assignment folders.</li>
+          <li>Use the <strong>Explorer</strong> panel to navigate files.</li>
+          <li>Use <strong>Terminal &gt; New Terminal</strong> to run commands.</li>
+          <li>Use the <strong>Extensions</strong> panel to install tools.</li>
+          <li>Select <strong>View &gt; Output</strong> for debugging information.</li>
+        </ul>
+      </section>
+
+      <!-- -------------------------------- -->
+      <!--        TROUBLESHOOTING VS CODE   -->
+      <!-- -------------------------------- -->
+      <section id="vscode-troubleshooting">
+        <h2>11.4 Troubleshooting VS Code Installation</h2>
+
+        <article>
+          <h3>Windows: "code is not recognized"</h3>
+          <p>This means VS Code is not in the PATH.</p>
+          <ol>
+            <li>Select <strong>View &gt; Command Palette</strong>.</li>
+            <li>Run <code>Shell Command: Install 'code' command in PATH</code>.</li>
+            <li>Restart PowerShell or Command Prompt.</li>
+          </ol>
+        </article>
+
+        <article>
+          <h3>macOS: "Cannot be opened because the developer cannot be verified"</h3>
+          <p>This is macOS Gatekeeper blocking the app.</p>
+          <ol>
+            <li>Open <strong>System Settings</strong>.</li>
+            <li>Choose <strong>Privacy &amp; Security</strong>.</li>
+            <li>Select <strong>Open Anyway</strong> next to VS Code.</li>
+          </ol>
+        </article>
+
+        <article>
+          <h3>Extensions will not install</h3>
+          <p>Try these steps:</p>
+          <ul>
+            <li>Check your internet connection.</li>
+            <li>Restart VS Code.</li>
+            <li>Make sure your system clock is correct.</li>
+            <li>If on a corporate network, confirm proxy settings.</li>
+          </ul>
+        </article>
+      </section>
+
+      <footer>
+        <p>VS Code Installation Guide</p>
+
+
+        <p class="ai-footnote">
+          <small>Note: This page was developed with the assistance of an AI tool and reviewed for accuracy and clarity
+            by the author.</small>
+        </p>
+      </footer>
+    </body>
+
+    </html>
+
+  </div>
+</main>
