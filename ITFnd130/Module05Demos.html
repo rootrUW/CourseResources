@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module 05 Demo: Joins and Subqueries</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #F8F8F8;
+      color: #000000;
+      line-height: 1.55;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .skip-link:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      padding: 12px 16px;
+      background: #FFFFFF;
+      color: #4B2E83;
+      display: inline-block;
+      z-index: 1000;
+    }
+
+    header {
+      background-color: #4B2E83;
+      color: #FFFFFF;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    header p {
+      margin: 8px 0 0 0;
+      font-size: 1rem;
+    }
+
+    .container {
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 20px 30px 40px 30px;
+      background: #FFFFFF;
+      border-left: 10px solid #B7A57A;
+      border-right: 10px solid #B7A57A;
+      box-sizing: border-box;
+    }
+
+    h2 {
+      color: #4B2E83;
+      border-bottom: 2px solid #B7A57A;
+      padding-bottom: 6px;
+      margin-top: 32px;
+    }
+
+    h3 {
+      color: #4B2E83;
+      margin-top: 28px;
+    }
+
+    p, li {
+      font-size: 1rem;
+    }
+
+    ul {
+      padding-left: 22px;
+    }
+
+    .important {
+      background: #FFF7E6;
+      border-left: 6px solid #B7A57A;
+      padding: 16px;
+      margin: 24px 0;
+    }
+
+    .note {
+      background: #F3F0FA;
+      border-left: 6px solid #4B2E83;
+      padding: 16px;
+      margin: 24px 0;
+    }
+
+    .try-it {
+      background: #F0F7FF;
+      border-left: 6px solid #2E6DA4;
+      padding: 16px;
+      margin: 24px 0;
+    }
+
+    pre {
+      background: #F4F4F4;
+      border: 1px solid #D0D0D0;
+      border-radius: 4px;
+      padding: 14px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family: Consolas, Menlo, Monaco, monospace;
+      font-size: 0.95rem;
+    }
+
+    code {
+      font-family: Consolas, Menlo, Monaco, monospace;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px 0;
+    }
+
+    th,
+    td {
+      border: 1px solid #CCCCCC;
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #EDE8F7;
+      color: #000000;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 0.95rem;
+      color: #444444;
+      border-top: 1px solid #CCCCCC;
+      padding-top: 16px;
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        padding: 18px 16px 30px 16px;
+        border-left-width: 6px;
+        border-right-width: 6px;
+      }
+
+      header h1 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header>
+    <h1>Module 05 Demo: Joins and Subqueries</h1>
+    <p>Inner Joins, Outer Joins, Cross Joins, Self Joins, Unions, Subqueries, Temp Tables, and CTEs</p>
+  </header>
+
+  <main id="main-content">
+    <div class="container">
+      <section class="important" aria-labelledby="important-section">
+        <h2 id="important-section">Important</h2>
+        <p>The SQL code on this page is provided as a demo and reference. You cannot run the code directly from this web page. To test these examples, copy the code, paste it into your SQL editor, and run it there one batch at a time. Read the code, run it, and compare the results carefully so you can see how each type of join or subquery changes the output.</p>
+      </section>
+
+      <section aria-labelledby="overview">
+        <h2 id="overview">Overview</h2>
+        <p>In this demo you will learn how to combine data from multiple tables and how to use intermediate queries to answer more complex questions. These are some of the most important query patterns in SQL because real database work usually involves related tables rather than just one table at a time.</p>
+        <p>This page covers the following topics:</p>
+        <ul>
+          <li>Inner Joins</li>
+          <li>Outer Joins</li>
+          <li>Cross Joins</li>
+          <li>Self Joins</li>
+          <li>Unions</li>
+          <li>Subqueries</li>
+          <li>Temporary Tables</li>
+          <li>Common Table Expressions (CTEs)</li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="join-strategy">
+        <h2 id="join-strategy">A Simple Strategy for Building Joins</h2>
+        <p>When students first learn joins, the syntax can feel harder than it really is. A good method is to build the query in four steps:</p>
+        <ol>
+          <li>List the columns you want in the result.</li>
+          <li>List the tables that contain those columns.</li>
+          <li>Figure out how the tables are connected.</li>
+          <li>Write the join using those pieces.</li>
+        </ol>
+        <div class="note">
+          <p><strong>Example:</strong> If you want publisher names and title names, then you need the <code>Publishers</code> and <code>Titles</code> tables, and they are connected by <code>pub_id</code>.</p>
+        </div>
+        <pre>Select
+  Pub_Name,
+  Title
+From dbo.Publishers
+Inner Join dbo.Titles
+  On Titles.Pub_Id = Publishers.Pub_Id;</pre>
+      </section>
+
+      <section aria-labelledby="inner-joins">
+        <h2 id="inner-joins">1) Inner Joins</h2>
+        <p>An inner join returns only the rows that have matching values in both tables. This is the most common type of join.</p>
+
+        <h3>Look at the source data</h3>
+        <pre>Use Pubs;
+Go
+
+Select *
+From dbo.Titles;
+
+Select *
+From dbo.Sales;
+Go</pre>
+
+        <h3>Focus on the columns you need</h3>
+        <pre>Select
+  Title_Id,
+  Title
+From dbo.Titles
+Order By Title_Id;
+
+Select
+  Title_Id,
+  Ord_Date,
+  Qty
+From dbo.Sales
+Order By Title_Id;
+Go</pre>
+
+        <h3>Join the two tables</h3>
+        <pre>Select
+  Titles.Title_Id,
+  Title,
+  Ord_Date,
+  Qty
+From dbo.Titles
+Inner Join dbo.Sales
+  On Titles.Title_Id = Sales.Title_Id;
+Go</pre>
+
+        <h3>Join more than two tables</h3>
+        <pre>Select
+  Stores.Stor_Id,
+  Stor_Name,
+  Titles.Title_Id,
+  Title,
+  Ord_Date,
+  Qty
+From dbo.Titles
+Inner Join dbo.Sales
+  On Titles.Title_Id = Sales.Title_Id
+Inner Join dbo.Stores
+  On Sales.Stor_Id = Stores.Stor_Id;
+Go</pre>
+
+        <h3>Use aliases for readability</h3>
+        <pre>Select
+  [Store ID] = St.Stor_Id,
+  [Store Name] = Stor_Name,
+  [Title ID] = T.Title_Id,
+  [Title] = Title,
+  [Sales Date] = Ord_Date,
+  [Sales Quantity] = Qty
+From dbo.Titles As T
+Inner Join dbo.Sales As S
+  On T.Title_Id = S.Title_Id
+Inner Join dbo.Stores As St
+  On S.Stor_Id = St.Stor_Id;
+Go</pre>
+
+        <div class="try-it">
+          <p><strong>Try this:</strong> Run the inner join example and compare the results with the original <code>Titles</code> and <code>Sales</code> tables. Notice that only rows with matching <code>Title_Id</code> values appear in the result.</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="bridge-joins">
+        <h2 id="bridge-joins">Joining Through a Bridge Table</h2>
+        <p>Sometimes two tables are not directly connected. In that case, you often use a bridge table to connect them. In the Pubs database, <code>Authors</code> and <code>Titles</code> are connected through <code>TitleAuthor</code>.</p>
+
+        <pre>Select
+  [Author Name] = A.Au_Fname + ' ' + A.Au_Lname,
+  [Title] = Title
+From dbo.Authors As A
+Inner Join dbo.TitleAuthor As TA
+  On A.Au_Id = TA.Au_Id
+Inner Join dbo.Titles As T
+  On T.Title_Id = TA.Title_Id;
+Go</pre>
+      </section>
+
+      <section aria-labelledby="outer-joins">
+        <h2 id="outer-joins">2) Outer Joins</h2>
+        <p>Outer joins are useful when you want to keep unmatched rows. For example, you may want all publishers listed, even if some of them do not currently have any titles.</p>
+
+        <h3>Left Outer Join</h3>
+        <pre>Select
+  Pub_Name,
+  Title
+From dbo.Publishers
+Left Outer Join dbo.Titles
+  On Titles.Pub_Id = Publishers.Pub_Id;</pre>
+
+        <h3>Right Outer Join</h3>
+        <pre>Select
+  Pub_Name,
+  Title
+From dbo.Titles
+Right Outer Join dbo.Publishers
+  On Titles.Pub_Id = Publishers.Pub_Id;</pre>
+
+        <h3>Show only unmatched rows</h3>
+        <pre>Select
+  Pub_Name,
+  Title
+From dbo.Titles
+Right Outer Join dbo.Publishers
+  On Titles.Pub_Id = Publishers.Pub_Id
+Where Title Is Null;
+Go</pre>
+
+        <div class="note">
+          <p>A common use of outer joins is to find missing related data. In this example, rows with <code>Title Is Null</code> show publishers that do not have matching titles.</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="mixing-joins">
+        <h2 id="mixing-joins">Mixing Inner and Outer Joins</h2>
+        <p>Be careful when mixing join types. An inner join later in the query can remove rows that were preserved by an outer join earlier in the query.</p>
+
+        <pre>Select
+  Pub_Name,
+  Title,
+  Qty
+From dbo.Titles
+Right Outer Join dbo.Publishers
+  On Titles.Pub_Id = Publishers.Pub_Id
+Left Join dbo.Sales
+  On Titles.Title_Id = Sales.Title_Id;</pre>
+
+        <pre>Select
+  Pub_Name,
+  Title,
+  Qty
+From dbo.Titles
+Right Outer Join dbo.Publishers
+  On Titles.Pub_Id = Publishers.Pub_Id
+Inner Join dbo.Sales
+  On Titles.Title_Id = Sales.Title_Id;</pre>
+      </section>
+
+      <section aria-labelledby="non-fk-joins">
+        <h2 id="non-fk-joins">Joining on Non-Foreign Key Columns</h2>
+        <p>You can also join tables on matching values even when there is no formal foreign key relationship. This can be useful, but you need to think carefully about whether the match is truly meaningful.</p>
+
+        <pre>Select
+  Pub_Name,
+  Au_Fname + ' ' + Au_Lname As Author_Name
+From dbo.Publishers
+Inner Join dbo.Authors
+  On Publishers.City = Authors.City;</pre>
+      </section>
+
+      <section aria-labelledby="cross-joins">
+        <h2 id="cross-joins">3) Cross Joins</h2>
+        <p>A cross join returns every possible combination of rows between two tables. This can create very large result sets.</p>
+
+        <pre>Select
+  Pub_Name,
+  Title
+From dbo.Titles
+Cross Join dbo.Publishers;
+Go</pre>
+
+        <div class="try-it">
+          <p><strong>Try this:</strong> Compare the row count from the cross join with the row count from the matching inner join. This helps show the difference between all possible combinations and only matching combinations.</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="self-joins">
+        <h2 id="self-joins">4) Self Joins</h2>
+        <p>A self join uses the same table twice in one query. This is useful when a table relates to itself, such as employees and their managers.</p>
+
+        <pre>Use Northwind;
+Go
+
+Select
+  Mgr.EmployeeId,
+  Mgr.LastName,
+  Emp.EmployeeId,
+  Emp.LastName
+From dbo.Employees As Emp
+Inner Join dbo.Employees As Mgr
+  On Emp.ReportsTo = Mgr.EmployeeId
+Order By 1, 2, 3, 4;
+Go</pre>
+
+        <pre>Select
+  [Manager] = IIf(IsNull(Mgr.EmployeeId, 0) = 0, 'General Manager', Mgr.LastName),
+  [Employee Name] = Emp.FirstName + ' ' + Emp.LastName
+From dbo.Employees As Emp
+Left Join dbo.Employees As Mgr
+  On Emp.ReportsTo = Mgr.EmployeeId
+Order By IsNull(Mgr.EmployeeId, 0), Emp.EmployeeId;
+Go</pre>
+
+        <div class="note">
+          <p>Notice that the same table appears twice, but with different aliases. That lets SQL treat one instance as employees and the other as managers.</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="unions">
+        <h2 id="unions">5) Unions</h2>
+        <p>Joins combine columns from related rows. Unions combine rows from two result sets that have the same number and type of columns.</p>
+
+        <pre>Use Pubs;
+Go
+
+Select
+  Stor_Name,
+  Stor_Address,
+  City,
+  State,
+  Zip
+From dbo.Stores
+
+Union
+
+Select
+  Au_Lname + ' ' + Au_Fname,
+  Address,
+  City,
+  State,
+  Zip
+From dbo.Authors
+Order By 4, 3, 1;
+Go</pre>
+      </section>
+
+      <section aria-labelledby="subqueries">
+        <h2 id="subqueries">6) Subqueries</h2>
+        <p>A subquery is a query inside another query. It is often used to calculate a value once and compare other results to it.</p>
+
+        <h3>Grand total</h3>
+        <pre>Select
+  [Grand Total] = Sum(Sales.Qty)
+From dbo.Sales;</pre>
+
+        <h3>Compare state totals to the grand total</h3>
+        <pre>Select
+  [State] = State,
+  [Total By State] = Sum(Sales.Qty),
+  [Grand Total] = (
+    Select Sum(Qty)
+    From dbo.Sales
+  )
+From dbo.Sales
+Inner Join dbo.Stores
+  On Stores.Stor_Id = Sales.Stor_Id
+Group By State;
+Go</pre>
+
+        <h3>Calculate percentages</h3>
+        <pre>Select
+  [State] = State,
+  [Total By State] = Sum(Sales.Qty),
+  [Grand Total] = (
+    Select Sum(Qty)
+    From dbo.Sales
+  ),
+  [Percentage By State] = Str((100 * Sum(Sales.Qty)) / (
+    Select Sum(Qty)
+    From dbo.Sales
+  ), 5, 2) + '%'
+From dbo.Sales
+Inner Join dbo.Stores
+  On Stores.Stor_Id = Sales.Stor_Id
+Group By State;
+Go</pre>
+      </section>
+
+      <section aria-labelledby="temp-tables">
+        <h2 id="temp-tables">7) Temporary Tables</h2>
+        <p>Temporary tables let you store intermediate results and then reuse them in later queries. They are helpful when a complex report is easier to build in steps.</p>
+
+        <pre>Select
+  [State] = State,
+  [Total By State] = Sum(Sales.Qty),
+  [Grand Total] = (
+    Select Sum(Sales.Qty)
+    From dbo.Sales
+  ),
+  [Percentage By State] = Str((100 * Sum(Sales.Qty)) / (
+    Select Sum(Sales.Qty)
+    From dbo.Sales
+  ), 5, 2) + '%'
+Into #SalesByState
+From dbo.Sales
+Inner Join dbo.Stores
+  On Stores.Stor_Id = Sales.Stor_Id
+Group By State;</pre>
+
+        <pre>If Object_Id('tempdb..#SalesByState') Is Not Null
+  Drop Table #SalesByState;</pre>
+      </section>
+
+      <section aria-labelledby="ctes">
+        <h2 id="ctes">8) Common Table Expressions (CTEs)</h2>
+        <p>A CTE is similar to a temporary result set, but it exists only for the statement that follows it. CTEs are often easier to read than temp tables for one-time reporting logic.</p>
+
+        <pre>With SalesByState As (
+  Select
+    State,
+    Sum(Qty) As TotalQty
+  From dbo.Sales
+  Inner Join dbo.Stores
+    On Stores.Stor_Id = Sales.Stor_Id
+  Group By State
+)
+Select *
+From SalesByState;
+Go</pre>
+      </section>
+
+      <section aria-labelledby="variables">
+        <h2 id="variables">9) Variables</h2>
+        <p>You can also store scalar values in variables and then reuse those values later in a query.</p>
+
+        <pre>Declare @GrandTotal int;
+
+Select
+  @GrandTotal = Sum(Qty)
+From dbo.Sales;
+
+Select
+  State,
+  Sum(Qty) As TotalQty,
+  @GrandTotal As GrandTotal
+From dbo.Sales
+Inner Join dbo.Stores
+  On Stores.Stor_Id = Sales.Stor_Id
+Group By State;
+Go</pre>
+      </section>
+
+      <section aria-labelledby="summary">
+        <h2 id="summary">Summary</h2>
+        <p>In this demo you worked with several ways to combine and reshape data. Inner joins return only matching rows, outer joins help you keep unmatched rows, cross joins produce every combination, and self joins let you compare rows within the same table. Unions combine result sets vertically, while subqueries, temp tables, CTEs, and variables help you solve more complex reporting problems in manageable steps.</p>
+      </section>
+
+      <footer>
+        <p>This page was prepared for course demonstration purposes. As always, review the code carefully, run it in your own SQL environment, and compare the results to what you expected.</p>
+      </footer>
+    </div>
+  </main>
+</body>
+</html>

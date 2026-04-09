@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creating Databases and Normalization</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #F8F8F8;
+      color: #000000;
+      line-height: 1.55;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .skip-link:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      padding: 12px 16px;
+      background: #FFFFFF;
+      color: #4B2E83;
+      display: inline-block;
+      z-index: 1000;
+    }
+
+    header {
+      background-color: #4B2E83;
+      color: #FFFFFF;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    header p {
+      margin: 8px 0 0 0;
+      font-size: 1rem;
+    }
+
+    .container {
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 20px 30px 40px 30px;
+      background: #FFFFFF;
+      border-left: 10px solid #B7A57A;
+      border-right: 10px solid #B7A57A;
+      box-sizing: border-box;
+    }
+
+    h2 {
+      color: #4B2E83;
+      border-bottom: 2px solid #B7A57A;
+      padding-bottom: 6px;
+      margin-top: 32px;
+    }
+
+    h3 {
+      color: #4B2E83;
+      margin-top: 28px;
+    }
+
+    p, li {
+      font-size: 1rem;
+    }
+
+    ul {
+      padding-left: 22px;
+    }
+
+    .important {
+      background: #FFF7E6;
+      border-left: 6px solid #B7A57A;
+      padding: 16px;
+      margin: 24px 0;
+    }
+
+    .note {
+      background: #F3F0FA;
+      border-left: 6px solid #4B2E83;
+      padding: 16px;
+      margin: 24px 0;
+    }
+
+    .try-it {
+      background: #F0F7FF;
+      border-left: 6px solid #2E6DA4;
+      padding: 16px;
+      margin: 24px 0;
+    }
+
+    pre {
+      background: #F4F4F4;
+      border: 1px solid #D0D0D0;
+      border-radius: 4px;
+      padding: 14px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family: Consolas, Menlo, Monaco, monospace;
+      font-size: 0.95rem;
+    }
+
+    code {
+      font-family: Consolas, Menlo, Monaco, monospace;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px 0;
+    }
+
+    th,
+    td {
+      border: 1px solid #CCCCCC;
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #EDE8F7;
+      color: #000000;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 0.95rem;
+      color: #444444;
+      border-top: 1px solid #CCCCCC;
+      padding-top: 16px;
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        padding: 18px 16px 30px 16px;
+        border-left-width: 6px;
+        border-right-width: 6px;
+      }
+
+      header h1 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header>
+    <h1>Creating Databases and Normalization</h1>
+    <p>Understanding basic database design, atomic values, keys, and normalization rules</p>
+  </header>
+
+  <main id="main-content">
+    <div class="container">
+      <section class="important" aria-labelledby="important-section">
+        <h2 id="important-section">Important</h2>
+        <p>The SQL code on this page is provided as a demo and reference. You cannot run the code directly from this web page. To test these examples, copy the code, paste it into your SQL editor, and run it there one batch at a time. Be sure to compare your results carefully as you work through each example.</p>
+      </section>
+
+      <section aria-labelledby="overview">
+        <h2 id="overview">Overview</h2>
+        <p>This demo introduces two related ideas. First, you will see how to create a database and run simple SQL statements such as <code>Create</code>, <code>Insert</code>, <code>Select</code>, <code>Update</code>, and <code>Delete</code>. Second, you will learn the basic rules of normalization, which help you organize data into tables that are easier to maintain, query, and protect from common data problems.</p>
+        <p>As you move through the examples, pay attention to how a poor design can still work at first, but creates problems as the database grows. Normalization is about building tables in a way that avoids those problems.</p>
+      </section>
+
+      <section aria-labelledby="data-design">
+        <h2 id="data-design">Data Design and Atomic Values</h2>
+        <p>A relational database stores data as rows and columns, but the process starts by breaking large pieces of information into smaller, meaningful parts. These smaller pieces are often called atomic values. For example, a full name and phone number stored together as one string are harder to search, sort, and validate than separate first name, last name, and phone number values.</p>
+
+        <div class="note">
+          <p><strong>Example:</strong> Instead of storing <code>Bob Smith 206.444.1111</code> as one value, a better design breaks it into <code>FirstName</code>, <code>LastName</code>, and <code>PhoneNumber</code>.</p>
+        </div>
+
+        <p>Once the data is broken into useful columns, rows can be grouped into tables, and tables can be related to one another using keys.</p>
+      </section>
+
+      <section aria-labelledby="common-sql">
+        <h2 id="common-sql">Common SQL Statements</h2>
+        <p>Most work in a relational database starts with a small group of SQL statements. These are the building blocks you will use throughout the course.</p>
+
+        <pre>Create Database Lab01RRoot;
+Go
+
+Use Lab01RRoot;
+Go
+
+Create Table dbo.Products (
+  ProductId int,
+  ProductName varchar(100),
+  ProductPrice money
+);
+Go
+
+Insert Into dbo.Products (
+  ProductId,
+  ProductName,
+  ProductPrice
+)
+Values (
+  1,
+  'ProdA',
+  9.99
+);
+Go
+
+Select
+  ProductId,
+  ProductName,
+  ProductPrice
+From dbo.Products;
+Go
+
+Update dbo.Products
+Set ProductPrice = 19.99
+Where ProductId = 1;
+Go
+
+Delete From dbo.Products
+Where ProductId = 1;
+Go</pre>
+
+        <div class="try-it">
+          <p><strong>Try this:</strong> Run the statements one batch at a time. After each batch, read the results carefully so you can see how the table changes.</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="single-subject">
+        <h2 id="single-subject">Rule: A Table Should Focus on One Subject</h2>
+        <p>A table should usually describe one main thing, such as customers, products, classes, or orders. When unrelated subjects are mixed together in one table, duplicate data and update problems are more likely.</p>
+
+        <h3>Example of a weak design</h3>
+        <pre>Create Table dbo.CustomersProducts (
+  CustomerName varchar(50) Null,
+  CustomerPhone varchar(50) Null,
+  ProductName varchar(50) Null,
+  Price varchar(50) Null
+);
+Go</pre>
+
+        <p>This works, but it mixes customer data and product data in one table. A better design splits the data into separate tables.</p>
+
+        <h3>Improved design</h3>
+        <pre>Create Table dbo.Customers (
+  CustomerName varchar(50) Null,
+  CustomerPhone varchar(50) Null
+);
+Go
+
+Create Table dbo.Products (
+  ProductName varchar(50) Null,
+  ProductPrice varchar(50) Null
+);
+Go</pre>
+      </section>
+
+      <section aria-labelledby="primary-keys">
+        <h2 id="primary-keys">Rule: Every Table Needs a Primary Key</h2>
+        <p>A primary key helps identify one row from another. Without a primary key, it is harder to update, delete, or relate specific rows accurately.</p>
+
+        <pre>Create Table dbo.Customers (
+  CustomerId int Not Null,
+  CustomerName varchar(50) Null,
+  CustomerPhone varchar(50) Null,
+  Constraint pkCustomers Primary Key (CustomerId)
+);
+Go
+
+Create Table dbo.Products (
+  ProductId int Not Null,
+  ProductName varchar(50) Null,
+  ProductPrice varchar(50) Null,
+  Constraint pkProducts Primary Key (ProductId)
+);
+Go</pre>
+
+        <div class="note">
+          <p>Primary keys are one of the most important ideas in relational design because they give each row a stable identity.</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="first-normal-form">
+        <h2 id="first-normal-form">First Normal Form: No Multi-Part Fields</h2>
+        <p>First Normal Form means each column should contain one value, not several pieces of information packed together.</p>
+
+        <h3>Example of a multi-part field</h3>
+        <pre>Create Table dbo.Customers (
+  CustomerId int Not Null,
+  CustomerName varchar(50),
+  CustomerPhone varchar(50),
+  CustomerAddress varchar(200),
+  Constraint pkCustomers Primary Key (CustomerId)
+);
+Go</pre>
+
+        <p>The address column above contains street, city, state, and zip code together. A better design separates those values.</p>
+
+        <h3>Improved design</h3>
+        <pre>Create Table dbo.Customers (
+  CustomerId int Not Null,
+  FirstName varchar(50),
+  LastName varchar(50),
+  Phone varchar(50),
+  Address varchar(100),
+  City varchar(50),
+  State char(2),
+  Zip char(5),
+  Constraint pkCustomers Primary Key (CustomerId)
+);
+Go</pre>
+      </section>
+
+      <section aria-labelledby="multi-valued-fields">
+        <h2 id="multi-valued-fields">First Normal Form: No Multi-Valued Fields</h2>
+        <p>A column should also avoid storing multiple values inside one row, such as a comma-separated list of product IDs or quantities.</p>
+
+        <h3>Weak design</h3>
+        <pre>Create Table dbo.BadDesignSales (
+  SalesId int Not Null,
+  CustomerId int,
+  ProductId varchar(50) Null,
+  Qty varchar(50) Null,
+  Constraint pkBadDesignSales Primary Key (SalesId)
+);
+Go</pre>
+
+        <p>Storing multiple product IDs and quantities in one row makes the data hard to query and validate. A better design uses a parent sales table and a child line item table.</p>
+
+        <h3>Improved design</h3>
+        <pre>Create Table dbo.Sales (
+  SalesId int Not Null,
+  CustomerId int,
+  Constraint pkSales Primary Key (SalesId)
+);
+Go
+
+Create Table dbo.SalesLineItems (
+  SalesId int,
+  LineItemId int,
+  ProductId int,
+  Qty int,
+  Constraint pkSalesLineItems Primary Key (SalesId, LineItemId)
+);
+Go</pre>
+      </section>
+
+      <section aria-labelledby="second-normal-form">
+        <h2 id="second-normal-form">Second Normal Form</h2>
+        <p>Second Normal Form matters when a table has a composite primary key. In that case, every non-key column should depend on the full key, not just part of it.</p>
+
+        <p>For example, if <code>SalesLineItems</code> uses <code>SalesId</code> and <code>LineItemId</code> as a composite key, then a column such as <code>SalesDate</code> does not belong there if it depends only on <code>SalesId</code>. That date should be stored in the <code>Sales</code> table instead.</p>
+
+        <pre>Create Table dbo.Sales (
+  SalesId int Not Null,
+  CustomerId int,
+  SalesDate date,
+  Constraint pkSales Primary Key (SalesId)
+);
+Go</pre>
+      </section>
+
+      <section aria-labelledby="third-normal-form">
+        <h2 id="third-normal-form">Third Normal Form</h2>
+        <p>Third Normal Form means non-key columns should depend on the primary key, not on some other non-key column. For example, if a sales row stores <code>CustomerId</code>, then customer name and phone number should normally come from the customer table rather than being repeated in the sales table.</p>
+
+        <div class="note">
+          <p>Repeating customer details in the sales table can lead to update problems because the same customer data may need to be changed in many places.</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="relationships">
+        <h2 id="relationships">Common Relationship Types</h2>
+        <p>Relational databases often use three main relationship patterns.</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Relationship Type</th>
+              <th>Description</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>One-to-One</td>
+              <td>One row in one table matches one row in another table.</td>
+              <td>Employees and EmployeeSensitiveData</td>
+            </tr>
+            <tr>
+              <td>One-to-Many</td>
+              <td>One row in one table matches many rows in another table.</td>
+              <td>Categories and Products</td>
+            </tr>
+            <tr>
+              <td>Many-to-Many</td>
+              <td>Many rows in one table match many rows in another table through a bridge table.</td>
+              <td>Sales and Products through SalesLineItems</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section aria-labelledby="one-to-one">
+        <h2 id="one-to-one">One-to-One Example</h2>
+        <p>One-to-one related tables are sometimes used for performance, privacy, or security. For example, an employee table might store public information, while a separate related table stores salary and SSN data.</p>
+
+        <pre>Create Table dbo.Employees (
+  EmployeeId int Not Null,
+  FirstName varchar(50),
+  LastName varchar(50),
+  Phone varchar(50),
+  HireDate datetime,
+  Constraint pkEmployees Primary Key (EmployeeId)
+);
+Go
+
+Create Table dbo.EmployeeSensitiveData (
+  EmployeeId int Not Null,
+  SSNumber varchar(50),
+  Salary money,
+  Address varchar(100),
+  City varchar(50),
+  State char(2),
+  Zip char(5),
+  Constraint pkEmployeeSensitiveData Primary Key (EmployeeId)
+);
+Go</pre>
+      </section>
+
+      <section aria-labelledby="one-to-many">
+        <h2 id="one-to-many">One-to-Many Example</h2>
+        <p>One-to-many relationships are very common. A category can have many products, but each product belongs to one category.</p>
+
+        <pre>Create Table dbo.Categories (
+  CategoryId int Not Null,
+  CategoryName varchar(50),
+  Description varchar(200),
+  Constraint pkCategories Primary Key (CategoryId)
+);
+Go
+
+Create Table dbo.Products (
+  ProductId int Not Null,
+  ProductName varchar(50),
+  Price varchar(50),
+  CategoryId int,
+  Constraint pkProducts Primary Key (ProductId)
+);
+Go</pre>
+      </section>
+
+      <section aria-labelledby="many-to-many">
+        <h2 id="many-to-many">Many-to-Many Example</h2>
+        <p>Many-to-many relationships are represented through a bridge table. In this script, <code>SalesLineItems</code> acts as the bridge between sales and products.</p>
+
+        <div class="try-it">
+          <p><strong>Try this:</strong> Run the <code>Sales</code>, <code>SalesLineItems</code>, and <code>Products</code> queries together and think about how the bridge table connects the other two tables.</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="summary">
+        <h2 id="summary">Summary</h2>
+        <p>In this demo you saw how database design moves from raw values to well-structured tables. You also saw why normalization matters. Good design keeps each table focused on one subject, gives each row a key, avoids multi-part and multi-valued fields, and places columns in the table where they logically belong. These ideas are foundational for everything else you will do in SQL.</p>
+      </section>
+
+      <footer>
+        <p>This page was prepared for course demonstration purposes. Review the code carefully, run it in your SQL environment, and compare the results with the ideas discussed in each section.</p>
+      </footer>
+    </div>
+  </main>
+</body>
+</html>

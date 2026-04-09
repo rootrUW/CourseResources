@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module 02 Demo: Constraints, Indexes, Views, and Stored Procedures</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #F8F8F8;
+      color: #000000;
+      line-height: 1.55;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .skip-link:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      padding: 12px 16px;
+      background: #FFFFFF;
+      color: #4B2E83;
+      display: inline-block;
+      z-index: 1000;
+    }
+
+    header {
+      background-color: #4B2E83;
+      color: #FFFFFF;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    header p {
+      margin: 8px 0 0 0;
+      font-size: 1rem;
+    }
+
+    .container {
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 20px 30px 40px 30px;
+      background: #FFFFFF;
+      border-left: 10px solid #B7A57A;
+      border-right: 10px solid #B7A57A;
+      box-sizing: border-box;
+    }
+
+    h2 {
+      color: #4B2E83;
+      border-bottom: 2px solid #B7A57A;
+      padding-bottom: 6px;
+      margin-top: 32px;
+    }
+
+    h3 {
+      color: #4B2E83;
+      margin-top: 28px;
+    }
+
+    p, li {
+      font-size: 1rem;
+    }
+
+    ul,
+    ol {
+      padding-left: 22px;
+    }
+
+    .important {
+      background: #FFF7E6;
+      border-left: 6px solid #B7A57A;
+      padding: 16px;
+      margin: 24px 0;
+    }
+
+    .note {
+      background: #F3F0FA;
+      border-left: 6px solid #4B2E83;
+      padding: 16px;
+      margin: 24px 0;
+    }
+
+    .try-it {
+      background: #F0F7FF;
+      border-left: 6px solid #2E6DA4;
+      padding: 16px;
+      margin: 24px 0;
+    }
+
+    pre {
+      background: #F4F4F4;
+      border: 1px solid #D0D0D0;
+      border-radius: 4px;
+      padding: 14px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family: Consolas, Menlo, Monaco, monospace;
+      font-size: 0.95rem;
+    }
+
+    code {
+      font-family: Consolas, Menlo, Monaco, monospace;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px 0;
+    }
+
+    th,
+    td {
+      border: 1px solid #CCCCCC;
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #EDE8F7;
+      color: #000000;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 0.95rem;
+      color: #444444;
+      border-top: 1px solid #CCCCCC;
+      padding-top: 16px;
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        padding: 18px 16px 30px 16px;
+        border-left-width: 6px;
+        border-right-width: 6px;
+      }
+
+      header h1 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header>
+    <h1>Module 02 Demo</h1>
+    <p>Constraints, Indexes, Views, and Stored Procedures</p>
+  </header>
+
+  <main id="main-content">
+    <div class="container">
+      <section class="important" aria-labelledby="important-section">
+        <h2 id="important-section">Important</h2>
+        <p>The SQL code on this page is provided as a demo and reference. You cannot run the code directly from this web page. To test these examples, copy the code, paste it into your SQL editor, and run it there one batch at a time. Read the code, run it, and compare the results carefully so you can see what each object does.</p>
+      </section>
+
+      <section aria-labelledby="overview">
+        <h2 id="overview">Overview</h2>
+        <p>This module introduces four common database object types that help make databases more reliable, faster, and easier to use: constraints, indexes, views, and stored procedures. These objects are not just advanced features. They are part of everyday database design and development.</p>
+        <p>In this demo you will see how constraints protect data, how indexes improve performance for common searches, how views display data through saved queries, and how stored procedures save reusable SQL code.</p>
+      </section>
+
+      <section aria-labelledby="constraints">
+        <h2 id="constraints">1) Constraints</h2>
+        <p>Constraints are database rules that help protect the quality of the data. SQL Server supports several types of data integrity, including entity integrity, domain integrity, referential integrity, and user-defined integrity.</p>
+
+        <div class="note">
+          <p>Think of constraints as built-in rules that the database enforces automatically. This means the database itself can help stop invalid data before it is saved.</p>
+        </div>
+
+        <h3>Create a demo table with several constraints</h3>
+        <pre>Create Table dbo.Demo (
+  Col1 int Not Null,
+  Col2 int,
+  Col3 int,
+  Col4 int,
+  Col5 int,
+  Col6 int Not Null,
+  Constraint pkDemo Primary Key (Col1),
+  Constraint uqDemoCol2 Unique (Col2),
+  Constraint ckDemoCol3 Check (Col3 &gt; 0),
+  Constraint fkDemoCol4 Foreign Key (Col4) References dbo.Demo (Col2),
+  Constraint dfDemoCol5 Default (0) For Col5
+);
+Go</pre>
+
+        <h3>Look at metadata about constraints</h3>
+        <pre>Exec sp_Help Demo;
+Go
+
+Exec sp_HelpConstraint Demo;
+Go</pre>
+
+        <p>SQL Server also stores metadata about constraints in system views.</p>
+
+        <pre>Select *
+From sys.default_constraints;
+
+Select *
+From sys.check_constraints;
+
+Select *
+From sys.key_constraints;
+
+Select *
+From sys.foreign_keys;
+Go</pre>
+
+        <h3>Default constraints</h3>
+        <p>A default constraint provides a value automatically when no value is supplied.</p>
+
+        <pre>Create Table dbo.Products (
+  ProductId int Identity(1,1) Not Null,
+  ProductName nvarchar(40) Not Null,
+  SupplierId int Null,
+  UnitPrice money Null,
+  UnitsInStock smallint Null,
+  Constraint pkProducts Primary Key (ProductId),
+  Constraint dfProductsUnitPrice Default (0) For UnitPrice,
+  Constraint dfProductsUnitsInStock Default (0) For UnitsInStock
+);
+Go</pre>
+
+        <h3>Primary key, unique, foreign key, and check constraints</h3>
+        <pre>Create Table dbo.Suppliers (
+  SupplierId int Not Null,
+  ContactId int Not Null,
+  Constraint pkSuppliers Primary Key Clustered (SupplierId)
+);
+Go
+
+Alter Table dbo.Suppliers
+Add Constraint uqSuppliersContactId
+  Unique Nonclustered (ContactId);
+Go
+
+Alter Table dbo.Products
+Add Constraint fkProductsSuppliers
+  Foreign Key (SupplierId)
+  References dbo.Suppliers (SupplierId)
+  On Update Cascade
+  On Delete Cascade;
+Go
+
+Alter Table dbo.Products
+Add Constraint ckProductsUnitPrice Check (UnitPrice &gt;= 0);
+Go</pre>
+
+        <div class="try-it">
+          <p><strong>Try this:</strong> Insert rows that break each rule and watch SQL Server reject them. This is one of the easiest ways to understand what each constraint protects.</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="indexes">
+        <h2 id="indexes">2) Indexes</h2>
+        <p>Indexes help SQL Server find rows faster. They do this by organizing or copying key values in a way that makes common searches more efficient.</p>
+
+        <h3>Heap table example</h3>
+        <p>When a table is first created without a clustered index, it is stored as a heap.</p>
+
+        <pre>Create Table dbo.PhoneList (
+  Id int,
+  Name varchar(50),
+  Extension char(5)
+);
+Go
+
+Insert Into dbo.PhoneList (
+  Id,
+  Name,
+  Extension
+)
+Values
+  (1, 'Bob Smith', '#11'),
+  (2, 'Sue Jones', '#12'),
+  (3, 'Joe Harris', '#13');
+Go</pre>
+
+        <h3>Clustered index</h3>
+        <p>A clustered index changes the physical order used for the table data.</p>
+
+        <pre>Create Clustered Index ciPhoneListId
+On dbo.PhoneList (Id);
+Go</pre>
+
+        <h3>Nonclustered index</h3>
+        <p>A nonclustered index stores a separate structure that helps SQL Server search more efficiently for specific columns.</p>
+
+        <pre>Create Nonclustered Index nciPhoneListName
+On dbo.PhoneList (Name);
+Go</pre>
+
+        <h3>Test common queries</h3>
+        <pre>Select *
+From dbo.PhoneList
+Order By Id;
+
+Select *
+From dbo.PhoneList
+Where Name = 'Joe Harris';
+
+Select
+  Name
+From dbo.PhoneList;
+Go</pre>
+
+        <div class="note">
+          <p>Turn on the Execution Plan in SQL Server Management Studio or Azure Data Studio to see when SQL Server uses the table directly and when it uses an index.</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="views">
+        <h2 id="views">3) Views</h2>
+        <p>A view is a saved <code>Select</code> statement. Views do not normally store data. Instead, they display data from one or more tables through a reusable query.</p>
+
+        <p>Views are useful because they can simplify query writing and provide an abstraction layer between tables and applications.</p>
+
+        <pre>Use Northwind;
+Go
+
+Create View vCustomerOrders
+As
+Select
+  Orders.OrderId,
+  Customers.CompanyName,
+  Customers.ContactName
+From Orders
+Inner Join Customers
+  On Orders.CustomerId = Customers.CustomerId;
+Go</pre>
+
+        <h3>Use the view like a table</h3>
+        <pre>Select *
+From vCustomerOrders;
+Go</pre>
+
+        <h3>See the definition of the view</h3>
+        <pre>Select *
+From syscomments
+Where id = Object_Id('vCustomerOrders');
+Go
+
+Exec sp_HelpText vCustomerOrders;
+Go</pre>
+
+        <div class="try-it">
+          <p><strong>Try this:</strong> Compare the full join query to the simple <code>Select *</code> from the view. This helps show why views are useful as a reusable abstraction layer.</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="stored-procedures">
+        <h2 id="stored-procedures">4) Stored Procedures</h2>
+        <p>A stored procedure is saved SQL code that can be executed as a unit. Unlike a view, a stored procedure can contain multiple statements and can also accept parameters.</p>
+
+        <pre>Use Northwind;
+Go
+
+Create Procedure pGetEmployeeData
+As
+Begin
+  Select
+    FirstName,
+    LastName,
+    HireDate
+  From Employees;
+End;
+Go</pre>
+
+        <h3>Execute the stored procedure</h3>
+        <pre>Exec pGetEmployeeData;
+Go</pre>
+
+        <h3>See the stored procedure text</h3>
+        <pre>Select *
+From syscomments
+Where id = Object_Id('pGetEmployeeData');
+Go
+
+Exec sp_HelpText 'pGetEmployeeData';
+Go</pre>
+
+        <div class="note">
+          <p>Stored procedures are often used for transaction processing, repeated business operations, and security. They let you keep important processing logic inside the database.</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="compare-objects">
+        <h2 id="compare-objects">Comparing the Object Types</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Object</th>
+              <th>Main Purpose</th>
+              <th>Example Use</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Constraint</td>
+              <td>Protect data quality</td>
+              <td>Prevent negative prices or duplicate keys</td>
+            </tr>
+            <tr>
+              <td>Index</td>
+              <td>Improve query performance</td>
+              <td>Speed up searches by name or id</td>
+            </tr>
+            <tr>
+              <td>View</td>
+              <td>Display data through a saved query</td>
+              <td>Show customer and order data together</td>
+            </tr>
+            <tr>
+              <td>Stored Procedure</td>
+              <td>Save executable SQL code</td>
+              <td>Run a standard report or process transaction logic</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section aria-labelledby="labs">
+        <h2 id="labs">Lab Ideas</h2>
+        <p>After working through the demos, practice by creating your own objects in a lab database.</p>
+        <ol>
+          <li>Create three related tables such as <code>Classes</code>, <code>Students</code>, and <code>StudentsClasses</code>.</li>
+          <li>Add primary keys, foreign keys, and a check constraint.</li>
+          <li>Create one or two indexes to improve likely searches.</li>
+          <li>Create a view for each table.</li>
+          <li>Create a stored procedure that returns rows from one table or view.</li>
+        </ol>
+      </section>
+
+      <section aria-labelledby="summary">
+        <h2 id="summary">Summary</h2>
+        <p>In this module you learned how constraints protect data, how indexes help performance, how views simplify data access, and how stored procedures save reusable SQL code. These are core database tools that you will use repeatedly as you move from simple tables to more realistic database solutions.</p>
+      </section>
+
+      <footer>
+        <p>This page was prepared for course demonstration purposes. Review the code carefully, run it in your SQL environment, and compare the results to what you expected.</p>
+      </footer>
+    </div>
+  </main>
+</body>
+</html>

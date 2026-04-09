@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module 03 Demo: Select Statements</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #F8F8F8;
+      color: #000000;
+      line-height: 1.55;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .skip-link:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      padding: 12px 16px;
+      background: #FFFFFF;
+      color: #4B2E83;
+      display: inline-block;
+      z-index: 1000;
+    }
+
+    header {
+      background-color: #4B2E83;
+      color: #FFFFFF;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    header p {
+      margin: 8px 0 0 0;
+      font-size: 1rem;
+    }
+
+    .container {
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 20px 30px 40px 30px;
+      background: #FFFFFF;
+      border-left: 10px solid #B7A57A;
+      border-right: 10px solid #B7A57A;
+      box-sizing: border-box;
+    }
+
+    h2 {
+      color: #4B2E83;
+      border-bottom: 2px solid #B7A57A;
+      padding-bottom: 6px;
+      margin-top: 32px;
+    }
+
+    h3 {
+      color: #4B2E83;
+      margin-top: 28px;
+    }
+
+    p, li {
+      font-size: 1rem;
+    }
+
+    ul,
+    ol {
+      padding-left: 22px;
+    }
+
+    .important {
+      background: #FFF7E6;
+      border-left: 6px solid #B7A57A;
+      padding: 16px;
+      margin: 24px 0;
+    }
+
+    .note {
+      background: #F3F0FA;
+      border-left: 6px solid #4B2E83;
+      padding: 16px;
+      margin: 24px 0;
+    }
+
+    .try-it {
+      background: #F0F7FF;
+      border-left: 6px solid #2E6DA4;
+      padding: 16px;
+      margin: 24px 0;
+    }
+
+    pre {
+      background: #F4F4F4;
+      border: 1px solid #D0D0D0;
+      border-radius: 4px;
+      padding: 14px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family: Consolas, Menlo, Monaco, monospace;
+      font-size: 0.95rem;
+    }
+
+    code {
+      font-family: Consolas, Menlo, Monaco, monospace;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px 0;
+    }
+
+    th,
+    td {
+      border: 1px solid #CCCCCC;
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #EDE8F7;
+      color: #000000;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 0.95rem;
+      color: #444444;
+      border-top: 1px solid #CCCCCC;
+      padding-top: 16px;
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        padding: 18px 16px 30px 16px;
+        border-left-width: 6px;
+        border-right-width: 6px;
+      }
+
+      header h1 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header>
+    <h1>Module 03 Demo</h1>
+    <p>Select Statements and Query Clauses</p>
+  </header>
+
+  <main id="main-content">
+    <div class="container">
+      <section class="important" aria-labelledby="important-section">
+        <h2 id="important-section">Important</h2>
+        <p>The SQL code on this page is provided as a demo and reference. You cannot run the code directly from this web page. To test these examples, copy the code, paste it into your SQL editor, and run it there one batch at a time. Read the code and compare the results carefully so you can see what each clause changes in the final result set.</p>
+      </section>
+
+      <section aria-labelledby="overview">
+        <h2 id="overview">Overview</h2>
+        <p>This module focuses on the <code>Select</code> statement, which is the main tool used to retrieve data from a relational database. As you work through these examples, notice that a query is usually built one clause at a time. You decide what columns you want, where the data should come from, how it should be filtered, how it should be grouped, and how the final results should be sorted.</p>
+        <p>By the end of this demo, you should be able to read and write queries that use common clauses such as <code>Select</code>, <code>From</code>, <code>Where</code>, <code>Order By</code>, <code>Group By</code>, <code>Having</code>, <code>Distinct</code>, <code>Union</code>, and <code>Top</code>.</p>
+      </section>
+
+      <section aria-labelledby="select-clause">
+        <h2 id="select-clause">Using the Select Clause</h2>
+        <p>The <code>Select</code> clause lists the columns or expressions you want in the result set. A query does not have to return only table columns. It can also return calculations, aliases, and literal values.</p>
+
+        <pre>Select
+  5 + 4,
+  5 * 4;</pre>
+
+        <h3>Column aliases</h3>
+        <p>Aliases rename columns in the result set. This is especially useful for calculations and reports.</p>
+
+        <pre>Select
+  [Sum] = 5 + 4,
+  [Product] = 5 * 4;</pre>
+
+        <div class="note">
+          <p>In this course, square brackets are a good, reliable way to define aliases that contain spaces.</p>
+        </div>
+
+        <pre>Use Northwind;
+Go
+
+Select
+  [AVG Sales Price] = AVG(UnitPrice)
+From [Order Details];
+
+Select
+  AVG(UnitPrice) As [AVG Sales Price]
+From [Order Details];</pre>
+      </section>
+
+      <section aria-labelledby="from-clause">
+        <h2 id="from-clause">Using the From Clause</h2>
+        <p>The <code>From</code> clause tells SQL Server where the data should come from. That source can be one table, more than one table, a view, or even a derived result.</p>
+
+        <pre>Select
+  ProductName
+From dbo.Products;
+
+Select
+  CompanyName
+From dbo.Customers;
+
+Select
+  CompanyName
+From Northwind.dbo.Customers;</pre>
+
+        <p>You can also combine data from multiple tables.</p>
+
+        <pre>Select
+  Products.ProductName,
+  Categories.CategoryName
+From dbo.Products
+Inner Join dbo.Categories
+  On Products.CategoryId = Categories.CategoryId;</pre>
+
+        <h3>Table aliases</h3>
+        <p>Aliases can also be used on table names to make longer queries easier to read.</p>
+
+        <pre>Select
+  P.ProductName,
+  C.CategoryName
+From dbo.Products As P
+Inner Join dbo.Categories As C
+  On P.CategoryId = C.CategoryId;</pre>
+      </section>
+
+      <section aria-labelledby="where-clause">
+        <h2 id="where-clause">Using the Where Clause</h2>
+        <p>The <code>Where</code> clause filters rows. If the condition is true, the row is returned. If the condition is false, it is not returned.</p>
+
+        <pre>Use Northwind;
+Go
+
+Select
+  ProductName,
+  UnitsInStock
+From dbo.Products
+Where ProductName = 'Chai';</pre>
+
+        <h3>Using joins with filters</h3>
+        <pre>Select Distinct
+  Customers.CompanyName,
+  Orders.OrderDate
+From dbo.Orders
+Inner Join dbo.Customers
+  On Orders.CustomerId = Customers.CustomerId
+Where OrderDate = '8/25/97';</pre>
+
+        <h3>Wildcards with Like</h3>
+        <pre>Select
+  ProductName,
+  UnitsInStock
+From dbo.Products
+Where ProductName Like 'Ch%';
+
+Select
+  ProductName,
+  UnitsInStock
+From dbo.Products
+Where ProductName Like 'C_a%';</pre>
+
+        <h3>Common operators</h3>
+        <pre>Select
+  ProductName,
+  UnitsInStock
+From dbo.Products
+Where UnitsInStock Between '0' And '35';
+
+Select
+  ProductName,
+  UnitsInStock
+From dbo.Products
+Where UnitsInStock In ('0', '17');</pre>
+
+        <h3>Subquery example</h3>
+        <pre>Select
+  CustomerId,
+  CompanyName
+From dbo.Customers
+Where CustomerId Not In (
+  Select CustomerId
+  From dbo.Orders
+);</pre>
+
+        <h3>Null checking</h3>
+        <pre>Select
+  CompanyName,
+  Fax
+From dbo.Suppliers
+Where Fax Is Null;</pre>
+
+        <div class="note">
+          <p>Use <code>Is Null</code> when checking for nulls. A comparison such as <code>Fax = Null</code> will not work the way students often expect.</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="order-by-clause">
+        <h2 id="order-by-clause">Using the Order By Clause</h2>
+        <p>The <code>Order By</code> clause sorts the result set. You can sort by one or more columns, and you can sort in ascending or descending order.</p>
+
+        <pre>Select
+  Pub_Id,
+  Type,
+  Title_Id,
+  Price
+From Pubs..Titles
+Order By
+  Pub_Id Desc,
+  Type,
+  Price;</pre>
+
+        <p>You can also sort by column position, although naming the column is often clearer.</p>
+      </section>
+
+      <section aria-labelledby="aggregate-functions">
+        <h2 id="aggregate-functions">Using Aggregate Functions</h2>
+        <p>Aggregate functions summarize data. Common examples include <code>Sum</code>, <code>Avg</code>, <code>Min</code>, <code>Max</code>, and <code>Count</code>.</p>
+
+        <pre>Select
+  [Grand Total] = Sum(ytd_sales),
+  [Average Sales] = Avg(ytd_sales),
+  [Number Of Sales] = Count(ytd_sales),
+  [Number Of Entries] = Count(*)
+From Pubs.dbo.Titles;</pre>
+
+        <p>You can also use aggregate functions inside subqueries.</p>
+
+        <pre>Select
+  OrderId,
+  CustomerId
+From dbo.Orders
+Where OrderDate = (
+  Select Max(OrderDate)
+  From dbo.Orders
+);</pre>
+      </section>
+
+      <section aria-labelledby="group-by">
+        <h2 id="group-by">Using Group By</h2>
+        <p>The <code>Group By</code> clause is used with aggregate functions when you want summarized results for each group.</p>
+
+        <pre>Select
+  ProductName,
+  Sum(Quantity) As TotalQty
+From [Order Details]
+Inner Join dbo.Products
+  On [Order Details].ProductId = Products.ProductId
+Group By ProductName
+Order By ProductName;</pre>
+
+        <div class="try-it">
+          <p><strong>Try this:</strong> Compare the grouped query with the non-grouped version that shows every order detail row. Notice how grouping reduces many detailed rows into one summary row per product.</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="having-clause">
+        <h2 id="having-clause">Using Having with Group By</h2>
+        <p>The <code>Having</code> clause filters groups after aggregation. In contrast, the <code>Where</code> clause filters rows before aggregation.</p>
+
+        <pre>Select
+  ProductName,
+  Sum(Quantity)
+From [Order Details]
+Inner Join dbo.Products
+  On [Order Details].ProductId = Products.ProductId
+Where Quantity &gt; 100
+Group By ProductName
+Having Sum(Quantity) &gt; 200
+Order By ProductName;</pre>
+
+        <div class="note">
+          <p>A helpful way to think about this is: <code>Where</code> filters rows, while <code>Having</code> filters groups.</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="distinct-clause">
+        <h2 id="distinct-clause">Using Distinct</h2>
+        <p>The <code>Distinct</code> keyword removes duplicate rows from the result set.</p>
+
+        <pre>Select Distinct
+  Orders.CustomerId,
+  Orders.OrderDate
+From dbo.Orders;</pre>
+
+        <p>Keep in mind that duplication is evaluated across the entire row, not just one column.</p>
+      </section>
+
+      <section aria-labelledby="union-clause">
+        <h2 id="union-clause">Using Union</h2>
+        <p>The <code>Union</code> operator combines rows from multiple queries into one result set. Each query must return the same number of columns in a compatible order.</p>
+
+        <pre>Select
+  [Customer Orders] = Count(*),
+  [Year] = 'For 1996'
+From dbo.Orders
+Where Year(OrderDate) = 1996
+
+Union
+
+Select
+  Count(*),
+  'For 1997'
+From dbo.Orders
+Where Year(OrderDate) = 1997
+
+Union
+
+Select
+  Count(*),
+  'For 1998'
+From dbo.Orders
+Where Year(OrderDate) = 1998;
+Go</pre>
+      </section>
+
+      <section aria-labelledby="top-clause">
+        <h2 id="top-clause">Using Top</h2>
+        <p>The <code>Top</code> clause limits the number of rows returned.</p>
+
+        <pre>Use Northwind;
+Go
+
+Select Top (5)
+  OrderId,
+  ProductId,
+  Quantity
+From [Order Details]
+Order By Quantity Desc;</pre>
+
+        <p><code>With Ties</code> includes additional rows that match the last ranked row.</p>
+
+        <pre>Select Top (5) With Ties
+  OrderId,
+  ProductId,
+  Quantity
+From [Order Details]
+Order By Quantity Desc;</pre>
+      </section>
+
+      <section aria-labelledby="rollup-cube">
+        <h2 id="rollup-cube">Grouping for Subtotals</h2>
+        <p>SQL Server also supports <code>Rollup</code> and <code>Cube</code> for subtotal and grand total reporting.</p>
+
+        <pre>Select
+  Title_Id,
+  Sum(qty) As Quantity
+From Pubs.dbo.Sales
+Group By Title_Id With Rollup
+Order By Title_Id;</pre>
+
+        <pre>Select
+  Stor_Id,
+  Title_Id,
+  Sum(qty) As Quantity
+From Pubs.dbo.Sales
+Group By Stor_Id, Title_Id With Cube
+Order By 1, 2;</pre>
+      </section>
+
+      <section aria-labelledby="functions-in-select">
+        <h2 id="functions-in-select">Using Built-In Functions in a Select</h2>
+        <p>You can also use built-in functions to improve how results are displayed.</p>
+
+        <pre>Select
+  IsNull(Stor_Name, 'All Stores'),
+  IsNull(Title, 'All Titles'),
+  Sum(qty) As Quantity
+From Pubs.dbo.Sales
+Inner Join Pubs.dbo.Titles
+  On Sales.Title_Id = Titles.Title_Id
+Inner Join Pubs.dbo.Stores
+  On Sales.Stor_Id = Stores.Stor_Id
+Group By Stor_Name, Title With Cube
+Order By 1, 2;</pre>
+      </section>
+
+      <section aria-labelledby="summary-table">
+        <h2 id="summary-table">Quick Summary of Common Clauses</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Clause</th>
+              <th>Main Job</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Select</td>
+              <td>Choose columns or expressions to return</td>
+            </tr>
+            <tr>
+              <td>From</td>
+              <td>Choose the data source</td>
+            </tr>
+            <tr>
+              <td>Where</td>
+              <td>Filter rows</td>
+            </tr>
+            <tr>
+              <td>Group By</td>
+              <td>Create groups for aggregation</td>
+            </tr>
+            <tr>
+              <td>Having</td>
+              <td>Filter groups after aggregation</td>
+            </tr>
+            <tr>
+              <td>Order By</td>
+              <td>Sort the result set</td>
+            </tr>
+            <tr>
+              <td>Distinct</td>
+              <td>Remove duplicate rows</td>
+            </tr>
+            <tr>
+              <td>Union</td>
+              <td>Combine rows from multiple queries</td>
+            </tr>
+            <tr>
+              <td>Top</td>
+              <td>Limit the number of rows returned</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section aria-labelledby="summary">
+        <h2 id="summary">Summary</h2>
+        <p>In this module you used the most common clauses found in <code>Select</code> statements. These clauses work together to retrieve, filter, summarize, sort, and combine data. As you continue through the course, many new topics will still depend on the ideas introduced here, so it is worth taking time to practice each clause until it feels familiar.</p>
+      </section>
+
+      <footer>
+        <p>This page was prepared for course demonstration purposes. Review the code carefully, run it in your SQL environment, and compare the results to what you expected.</p>
+      </footer>
+    </div>
+  </main>
+</body>
+</html>
